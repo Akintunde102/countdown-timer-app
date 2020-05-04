@@ -6,18 +6,40 @@ import {
   Text,
   TouchableOpacity,
   ViewStyle,
+  Keyboard,
+  Alert,
+  Dimensions
 } from 'react-native';
+
+
+const {fontScale} = Dimensions.get('window');
+
 
 const InputForm = ({
   setDuration,
   setTimerStatus,
-  style
+  style,
 }: {
   setDuration: Function;
   setTimerStatus: Function;
-  style: ViewStyle
+  style: ViewStyle;
 }) => {
-  const [durationInput, setDurationInput] = useState<number>(0);
+  const [durationInput, setDurationInput] = useState<string>('0');
+  const onChangeText = (text: string) => {
+    setDurationInput(text);
+  };
+
+  const handleSubmit = () => {
+    const inputAsNumber = parseInt(durationInput, 10);
+    if (!/^-?[0-9]+$/.test(durationInput)) {
+      Alert.alert('Bad Input', 'Only Positive Whole Numbers Are Allowed');
+      return;
+    }
+    setDuration(inputAsNumber);
+    setTimerStatus({starts: true, time: Math.round(Date.now()/1000)});
+    Keyboard.dismiss();
+  };
+
   return (
     <View style={{...style, ...styles.view}}>
       <View style={styles.textView}>
@@ -28,16 +50,15 @@ const InputForm = ({
           style={styles.input}
           placeholder="(Min)"
           placeholderTextColor="#777776"
-          onChangeText={(text: string) => {
-            setDurationInput(parseInt(text, 10));
-          }}
+          onChangeText={onChangeText}
+          onSubmitEditing={() => Keyboard.dismiss()}
+          keyboardType="numeric"
         />
       </View>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          setDuration(durationInput);
-          setTimerStatus({starts: true});
+          handleSubmit();
         }}>
         <Text style={styles.buttonText}>START</Text>
       </TouchableOpacity>
@@ -47,6 +68,8 @@ const InputForm = ({
 
 const styles = StyleSheet.create({
   view: {
+    width: '70%',
+    height: '10%'
   },
   inputView: {
     borderColor: '#000',
@@ -55,7 +78,7 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: '1%',
     marginLeft: '2%',
-    marginRight: '2%',
+    marginRight: '2%'
   },
   input: {
     flex: 3,
@@ -68,12 +91,14 @@ const styles = StyleSheet.create({
   },
   textView: {
     padding: '1%',
-    borderColor: 'yellow',
-    borderWidth: 3,
+    paddingRight: '0%',
     flex: 3,
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   text: {
-    fontSize: 17,
+    fontSize: 12 / fontScale,
     textAlign: 'center',
     justifyContent: 'center',
     alignContent: 'center',
@@ -84,11 +109,10 @@ const styles = StyleSheet.create({
     flex: 2.5,
   },
   buttonText: {
-    paddingTop: '12%',
-    paddingLeft: '20%',
-    paddingRight: '20%',
+    padding: '15%',
+    paddingLeft: '14%',
+    paddingRight: '10%',
     color: '#fff',
-    textAlign: 'center',
   },
 });
 

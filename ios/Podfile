@@ -79,6 +79,8 @@ target 'Timer' do
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
+
   target 'TimerTests' do
     inherit! :complete
     # Pods for testing

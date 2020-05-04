@@ -1,149 +1,297 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Text, Dimensions} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Sound from 'react-native-sound';
 
 import {useInterval} from '../utils';
+import ControlButton from './ControlButton';
 
 const convertSecondsToMins = (timeInSeconds: number) => {
   const minutes = Math.floor(timeInSeconds / 60);
   const seconds = timeInSeconds - minutes * 60;
   return {
-    minutes,
-    seconds,
+    minutes: minutes >= 100 ? minutes : ('0' + minutes).slice(-2),
+    seconds: ('0' + seconds).slice(-2),
   };
 };
+
+let ping = new Sound('ping.mp3', Sound.MAIN_BUNDLE, (error: string) => {
+  if (error) {
+    console.log(error);
+  }
+});
+
+console.log({v: ping.getVolume()});
 
 const {fontScale} = Dimensions.get('window');
 
 const Timer = ({
   durationInMin,
-  starts,
+  startDetails,
   style,
 }: {
   durationInMin: number;
-  starts: boolean;
+  startDetails: {starts: boolean; time?: Date};
   style: ViewStyle;
 }) => {
-  //const presentTime = Math.floor(Date.now() / 1000);
   const durationInSecs = durationInMin * 60;
   const [secsLeft, setSecsLeft] = useState<number>(durationInSecs);
   const [delay, setDelay] = useState<number>(1000);
   const {minutes, seconds} = convertSecondsToMins(secsLeft);
-  const [pause, setPause] = useState<boolean>(false);
+  const [pause, setPause] = useState<boolean>(true);
+  const [showTimer, setShowTimer] = useState<boolean>(false);
 
-  console.log({durationInSecs, secsLeft, starts});
+  const {starts: shouldTimerStart, time: initializationTime} = startDetails;
 
   useEffect(() => {
-    setSecsLeft(durationInMin * 60);
-  }, [durationInMin]);
+    if (shouldTimerStart) {
+      setSecsLeft(durationInSecs);
+      if (pause) {
+        setPause(false);
+      }
+    }
+  }, [durationInSecs, initializationTime]);
 
   useInterval(
     () => {
-      if (starts) {
+      if (shouldTimerStart) {
+        if (secsLeft <= 1) {
+          setPause(true);
+        }
         setSecsLeft(secsLeft - 1);
       }
     },
     pause ? null : delay,
   );
 
+  useInterval(() => {
+    if (secsLeft <= 10 && secsLeft !== 0) {
+      setShowTimer(!showTimer);
+      console.log({secsLeft2: secsLeft});
+      ping.play(success => {
+        console.log({secsLeft});
+        if (!success) {
+          console.log('Sound did not play');
+        }
+      });
+    }
+    if (secsLeft === 0) {
+      setShowTimer(true);
+    }
+  }, delay / 2);
+
   return (
     <View style={{...styles.wholeView, ...style}}>
-      <Text style={styles.tagText}> More than Half Way There</Text>
+      <View style={styles.tagTextView}>
+        {shouldTimerStart && !pause && secsLeft < durationInSecs / 2 ? (
+          <Text style={styles.tagText}> More than halfway there!</Text>
+        ) : (
+          shouldTimerStart &&
+          secsLeft <= 0 && <Text style={styles.tagText}> Time's Up </Text>
+        )}
+      </View>
       <View style={styles.mainView}>
         <View style={styles.mainViewText}>
-          <Text style={styles.timerText}>
+          <Text
+            style={{
+              ...styles.timerText,
+              ...(secsLeft >= 6000
+                ? {
+                    fontSize: 80 / fontScale,
+                  }
+                : {
+                    fontSize: 100 / fontScale,
+                  }),
+              ...(shouldTimerStart && secsLeft <= 20 && secsLeft !== 0
+                ? {
+                    color: 'red',
+                  }
+                : {
+                    color: '#000',
+                  }),
+              ...(showTimer
+                ? {}
+                : {
+                    display: 'none',
+                  }),
+            }}>
             {minutes}:{seconds}
           </Text>
         </View>
         <View style={styles.mainViewIcon}>
-          <Icon.Button
-            style={styles.icon}
-            name="pause-circle-outline"
-            color=""
-            size={400}
-            solid
+          <TouchableOpacity
             onPress={() => {
+              if (secsLeft <= 0) {
+                setSecsLeft(durationInSecs);
+              }
               setPause(!pause);
-            }}
-          />
+            }}>
+            {pause ? (
+              <Icon
+                style={styles.icon}
+                name="play-circle-outline"
+                color="#000"
+                size={60 / fontScale}
+              />
+            ) : (
+              <Icon
+                style={styles.icon}
+                name="pause-circle-outline"
+                color="#000"
+                size={60 / fontScale}
+              />
+            )}
+          </TouchableOpacity>
         </View>
       </View>
-      {/**
-       * <Button
-        onPress={() => {
-          setDelay(1000);
-        }}
-        title="1X"
-        color="#62bfac"
-      />
-      <Button
-        onPress={() => {
-          setDelay(666.67);
-        }}
-        title="1.5X"
-        color="#62bfac"
-      />
-
-      <Button
-        onPress={() => {
-          setDelay(500);
-        }}
-        title="2X"
-        color="#62bfac"
-      />
-
-      <Button
-        onPress={() => {
-          setPause(!pause);
-        }}
-        title="Pause"
-        color="#62bfac"
-      />
-       */}
+      <View style={styles.controlButtons}>
+        <ControlButton
+          action={() => {
+            setDelay(1000);
+          }}
+          customStyle={
+            delay === 1000
+              ? styles.controlButtonClicked
+              : styles.controlButtonUnclicked
+          }>
+          <Text
+            style={
+              delay === 1000
+                ? styles.controlButtonText
+                : styles.controlButtonTextClicked
+            }>
+            1X
+          </Text>
+        </ControlButton>
+        <ControlButton
+          action={() => {
+            setDelay(666.67);
+          }}
+          customStyle={
+            delay === 666.67
+              ? styles.controlButtonClicked
+              : styles.controlButtonUnclicked
+          }>
+          <Text
+            style={
+              delay === 666.67
+                ? styles.controlButtonText
+                : styles.controlButtonTextClicked
+            }>
+            1.5X
+          </Text>
+        </ControlButton>
+        <ControlButton
+          action={() => {
+            setDelay(500);
+          }}
+          customStyle={
+            delay === 500
+              ? styles.controlButtonClicked
+              : styles.controlButtonUnclicked
+          }>
+          <Text
+            style={
+              delay === 500
+                ? styles.controlButtonText
+                : styles.controlButtonTextClicked
+            }>
+            2X
+          </Text>
+        </ControlButton>
+      </View>
     </View>
   );
+};
+
+const constantStyles = {
+  controlButton: {
+    borderColor: '#000',
+    borderWidth: 3,
+    margin: '5%',
+    marginRight: '3%',
+    marginLeft: '0%',
+    width: '24%',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: '3%',
+    paddingRight: '3%',
+    paddingTop: '3%',
+    paddingBottom: '3%',
+  },
 };
 
 const styles = StyleSheet.create({
   wholeView: {},
   mainView: {
     margin: 0,
-    borderColor: 'red',
-    borderWidth: 3,
     padding: 0,
     flexDirection: 'row',
+    height: '40%',
   },
   mainViewText: {
-    borderColor: 'red',
-    borderWidth: 3,
-    flex: 5,
-  },
-  mainViewIcon: {
-    borderColor: 'red',
-    borderWidth: 3,
-    flex: 1.5,
+    width: '100%',
+    flex: 6,
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  timerText: {
-    fontSize: 100 / fontScale,
-    fontFamily: 'sans-serif-medium',
+  mainViewIcon: {
+    flex: 1.5,
     textAlign: 'center',
-    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '5%',
     padding: 0,
-    color: '#000',
-    backgroundColor: 'blue',
+  },
+  timerText: {
+    fontFamily: 'uFont',
+    textAlign: 'center',
   },
   tagText: {
     textAlign: 'center',
-    marginTop: '5%',
-    fontSize: 18,
+    fontSize: 14,
     fontStyle: 'italic',
     color: '#000',
+    fontWeight: '700',
+    alignSelf: 'flex-end',
   },
-  icon: {
-    fontSize: 65 / fontScale,
+  tagTextView: {
+    height: '20%',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '80%',
+    flexDirection: 'row',
+    flexWrap: 'wrap-reverse',
+  },
+  icon: {},
+  controlButtonUnclicked: {
+    ...constantStyles.controlButton,
+  },
+  controlButtons: {
+    flexDirection: 'row',
+    marginLeft: '10%',
+    width: '80%',
+  },
+  controlButtonClicked: {
+    ...constantStyles.controlButton,
+    backgroundColor: '#6c6c6c',
+  },
+  controlButtonText: {
+    fontWeight: '700',
+    color: '#fff',
+  },
+  controlButtonTextClicked: {
+    fontWeight: '700',
     color: '#000',
   },
 });

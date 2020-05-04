@@ -7,13 +7,22 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, View, StatusBar} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  StatusBar,
+  KeyboardAvoidingView,
+} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {Timer, InputForm} from './components';
 
 const App = () => {
   const [duration, setDuration] = useState<number>(0);
-  const [timerStatus, setTimerStatus] = useState<{starts: boolean}>({
+  const [timerStatus, setTimerStatus] = useState<{
+    starts: boolean;
+    time?: Date;
+  }>({
     starts: false,
   });
   useEffect(() => {
@@ -23,18 +32,20 @@ const App = () => {
     <>
       <StatusBar barStyle="light-content" hidden={true} />
       <SafeAreaView>
-        <View style={styles.app}>
-          <InputForm
-            setDuration={setDuration}
-            setTimerStatus={setTimerStatus}
-            style={styles.inputForm}
-          />
-          <Timer
-            style={styles.timer}
-            starts={timerStatus.starts}
-            durationInMin={duration}
-          />
-        </View>
+        <KeyboardAvoidingView behavior="height">
+          <View style={styles.app}>
+            <InputForm
+              setDuration={setDuration}
+              setTimerStatus={setTimerStatus}
+              style={styles.inputForm}
+            />
+            <Timer
+              style={styles.timer}
+              startDetails={timerStatus}
+              durationInMin={duration}
+            />
+          </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </>
   );
@@ -44,6 +55,7 @@ const styles = StyleSheet.create({
   app: {
     width: '100%',
     padding: '7%',
+    paddingTop: '20%',
   },
   textInput: {
     width: '50%',
