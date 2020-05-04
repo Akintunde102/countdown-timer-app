@@ -1,5 +1,5 @@
 import Timer from './Timer';
 import InputForm from './InputForm';
-import ControlButton from './ControlButton';
+import ControlButtons from './ControlButtons';
 
-export {Timer, InputForm, ControlButton};
+export {Timer, InputForm, ControlButtons};

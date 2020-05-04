@@ -1,11 +1,5 @@
 import React, {ReactChild} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ViewStyle,
-  View,
-} from 'react-native';
+import {TouchableOpacity, ViewStyle} from 'react-native';
 
 const ControlButton = ({
   action,
@@ -26,9 +20,5 @@ const ControlButton = ({
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  view: {},
-});
 
 export default ControlButton;
