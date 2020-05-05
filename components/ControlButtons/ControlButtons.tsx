@@ -18,7 +18,8 @@ const ControlButtons = ({
   const constantStyles = {
     borderColor: '#000',
     borderWidth: 3,
-    margin: dHeight * 0.03,
+    marginTop: dHeight * 0.02,
+    marginBottom: dHeight * 0.03,
     marginRight: dWidth * 0.03,
     marginLeft: 0,
     width: dWidth * 0.24,
