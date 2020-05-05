@@ -60,3 +60,10 @@ buck-out/
 
 # vscode
 .vscode/
+
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+*.build
