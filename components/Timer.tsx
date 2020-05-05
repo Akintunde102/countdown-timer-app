@@ -7,33 +7,10 @@ import {
   ViewStyle,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Sound from 'react-native-sound';
-
-import {useInterval} from '../utils';
+import {Player} from '@react-native-community/audio-toolkit';
+import {useInterval, FormatTimeForDisplay} from '../utils';
 import ControlButtons from './ControlButtons';
 import {SizeContext} from '../contexts';
-
-const convertSecondsToMins = (timeInSeconds: number) => {
-  const minutes = Math.floor(timeInSeconds / 60);
-  const seconds = timeInSeconds - minutes * 60;
-  const timeObj = {
-    minutes: minutes >= 100 ? minutes : ('0' + minutes).slice(-2),
-    seconds: ('0' + seconds).slice(-2),
-  };
-  const formattedDisplay = `${timeObj.minutes}:${timeObj.seconds}`;
-  const digitNumber = formattedDisplay.toString().length;
-  return {
-    ...timeObj,
-    formattedDisplay,
-    digitNumber,
-  };
-};
-
-let ping = new Sound('ping.mp3', Sound.MAIN_BUNDLE, (error: string) => {
-  if (error) {
-    console.log(error);
-  }
-});
 
 const Timer = ({
   durationInMin,
@@ -44,49 +21,64 @@ const Timer = ({
   startDetails: {starts: boolean; time?: Date};
   style: ViewStyle;
 }) => {
+  // Convert Duration To Seconds
+  const durationInSecs = durationInMin * 60;
+
+  // Contexts
   const {fontScale, dHeight, dWidth} = useContext(SizeContext);
 
-  const durationInSecs = durationInMin * 60;
+  // States
   const [secsLeft, setSecsLeft] = useState<number>(durationInSecs);
   const [delay, setDelay] = useState<number>(1000);
-  const {formattedDisplay, digitNumber} = convertSecondsToMins(secsLeft);
+  const {formattedDisplay, digitNumber} = FormatTimeForDisplay(secsLeft);
   const [pause, setPause] = useState<boolean>(true);
   const [showTimer, setShowTimer] = useState<boolean>(false);
+  const [tagText, setTagText] = useState<string>('');
   const {starts: shouldTimerStart, time: initializationTime} = startDetails;
 
+  // To Restart Timer If User Clicks Play Again
   useEffect(() => {
     if (shouldTimerStart) {
       setSecsLeft(durationInSecs);
+      setTagText('');
       if (pause) {
         setPause(false);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [durationInSecs, initializationTime]);
 
+  // An Intelligent Wrapper for UseEffect and SetInterval, controls the timer ticks
+  // and watches for operations tide to the Timer ticks
   useInterval(
     () => {
       if (shouldTimerStart) {
+        if (!pause && secsLeft <= durationInSecs / 2 + 1) {
+          setTagText('More than halfway there!');
+        }
+
         if (secsLeft <= 1) {
+          setTagText("Time's Up");
           setPause(true);
         }
+
         setSecsLeft(secsLeft - 1);
       }
     },
     pause ? null : delay,
   );
 
+  // This Watches for only for Blink And Sound Effects
+  // 'cause blink and sound effects needs their own 'smart" interval delays
   useInterval(() => {
-    if (secsLeft <= 10 && secsLeft !== 0) {
+    if (!pause && secsLeft <= 10 && secsLeft !== 0) {
       setShowTimer(!showTimer);
-      console.log({secsLeft2: secsLeft});
-      ping.play(success => {
-        console.log({secsLeft});
-        if (!success) {
-          console.log('Sound did not play');
-        }
+
+      new Player('ping.mp3').play().on('ended', () => {
+        console.log('Sound Played');
       });
     }
+
     if (secsLeft === 0) {
       setShowTimer(true);
     }
@@ -111,10 +103,10 @@ const Timer = ({
       textAlign: 'center',
       justifyContent: 'center',
       alignItems: 'center',
-      marginRight: dWidth * 0.10,
+      marginRight: dWidth * 0.1,
     },
     tagText: {
-      fontSize: 20/fontScale,
+      fontSize: 20 / fontScale,
       color: '#000',
       fontWeight: '700',
     },
@@ -168,12 +160,7 @@ const Timer = ({
     <View style={{...styles.wholeView, ...style}}>
       <View style={styles.mainView}>
         <View style={styles.tagTextView}>
-          {shouldTimerStart && !pause && secsLeft < durationInSecs / 2 ? (
-            <Text style={styles.tagText}> More than halfway there!</Text>
-          ) : (
-            shouldTimerStart &&
-            secsLeft <= 0 && <Text style={styles.tagText}> Time's Up </Text>
-          )}
+          <Text style={styles.tagText}> {tagText} </Text>
         </View>
         <View style={styles.mainViewTimer}>
           <View style={styles.mainViewText}>
@@ -183,6 +170,7 @@ const Timer = ({
             <TouchableOpacity
               onPress={() => {
                 if (secsLeft <= 0) {
+                  setTagText('');
                   setSecsLeft(durationInSecs);
                 }
                 setPause(!pause);

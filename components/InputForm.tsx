@@ -20,7 +20,9 @@ const InputForm = ({
   setTimerStatus: Function;
   style: ViewStyle;
 }) => {
+  // Contexts
   const {fontScale, dHeight} = useContext(SizeContext);
+
   const styles = StyleSheet.create({
     view: {
       flexDirection: 'row',
@@ -105,7 +107,5 @@ const InputForm = ({
     </View>
   );
 };
-
-
 
 export default InputForm;

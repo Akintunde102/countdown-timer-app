@@ -81,6 +81,8 @@ target 'Timer' do
 
   pod 'RNSound', :path => '../node_modules/react-native-sound'
 
+  pod 'ReactNativeAudioToolkit', :path => '../node_modules/@react-native-community/audio-toolkit'
+
   target 'TimerTests' do
     inherit! :complete
     # Pods for testing

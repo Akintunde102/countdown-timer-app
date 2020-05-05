@@ -1,0 +1,132 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot 1`] = `
+<View
+  style={Object {}}
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#6c6c6c",
+        "borderColor": "#000",
+        "borderWidth": 3,
+        "justifyContent": "center",
+        "margin": 40.019999999999996,
+        "marginLeft": 0,
+        "marginRight": 22.5,
+        "opacity": 1,
+        "paddingBottom": 40.019999999999996,
+        "paddingLeft": 22.5,
+        "paddingRight": 22.5,
+        "paddingTop": 40.019999999999996,
+        "textAlign": "center",
+        "width": 180,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#fff",
+          "fontSize": 41.66666666666667,
+          "fontWeight": "700",
+        }
+      }
+    >
+      1X
+    </Text>
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "borderColor": "#000",
+        "borderWidth": 3,
+        "justifyContent": "center",
+        "margin": 40.019999999999996,
+        "marginLeft": 0,
+        "marginRight": 22.5,
+        "opacity": 1,
+        "paddingBottom": 40.019999999999996,
+        "paddingLeft": 22.5,
+        "paddingRight": 22.5,
+        "paddingTop": 40.019999999999996,
+        "textAlign": "center",
+        "width": 180,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000",
+          "fontSize": 41.66666666666667,
+          "fontWeight": "700",
+        }
+      }
+    >
+      1.5X
+    </Text>
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "borderColor": "#000",
+        "borderWidth": 3,
+        "justifyContent": "center",
+        "margin": 40.019999999999996,
+        "marginLeft": 0,
+        "marginRight": 22.5,
+        "opacity": 1,
+        "paddingBottom": 40.019999999999996,
+        "paddingLeft": 22.5,
+        "paddingRight": 22.5,
+        "paddingTop": 40.019999999999996,
+        "textAlign": "center",
+        "width": 180,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#000",
+          "fontSize": 41.66666666666667,
+          "fontWeight": "700",
+        }
+      }
+    >
+      2X
+    </Text>
+  </View>
+</View>
+`;

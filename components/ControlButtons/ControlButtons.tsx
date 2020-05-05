@@ -12,6 +12,7 @@ const ControlButtons = ({
   setDelay: Function;
   customStyle: ViewStyle;
 }) => {
+  // Contexts
   const {fontScale, dHeight, dWidth} = useContext(SizeContext);
 
   const constantStyles = {

@@ -10,7 +10,8 @@ import SplashScreen from 'react-native-splash-screen';
 import {Timer, InputForm} from './components';
 import {SizeContextProvider, SizeContext} from './contexts';
 
-const App = () => {
+function App() {
+  // States and Contexts Calls
   const {dHeight, dWidth} = useContext(SizeContext);
   const [duration, setDuration] = useState<number>(0);
   const [timerStatus, setTimerStatus] = useState<{
@@ -19,6 +20,8 @@ const App = () => {
   }>({
     starts: false,
   });
+
+  // To Hide Splash Screen when JS is done loading
   useEffect(() => {
     SplashScreen.hide();
   });
@@ -71,6 +74,6 @@ const App = () => {
       </SafeAreaView>
     </>
   );
-};
+}
 
 export default App;

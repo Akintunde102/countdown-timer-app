@@ -1,4 +1,12 @@
 rootProject.name = 'Timer'
+include ':@react-native-community_audio-toolkit'
+project(':@react-native-community_audio-toolkit').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/audio-toolkit/android')
+include ':react-native-sound'
+project(':react-native-sound').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sound/android')
+include ':react-native-sound'
+project(':react-native-sound').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sound/android')
+include ':react-native-sound'
+project(':react-native-sound').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sound/android')
 include ':react-native-sound'
 project(':react-native-sound').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sound/android')
 include ':react-native-sound'

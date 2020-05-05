@@ -7,7 +7,7 @@ import {
 const size = {
   dHeight: hp('100%'),
   dWidth: wp('100%'),
-  fontScale: 360/wp('100%'),
+  fontScale: 360 / wp('100%'),
 };
 
 export const SizeContext = createContext(size);

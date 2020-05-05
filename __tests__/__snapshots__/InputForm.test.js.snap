@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#ffc",
+      "flexDirection": "row",
+      "height": 106.72,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignContent": "center",
+        "flex": 1,
+        "justifyContent": "center",
+        "textAlign": "center",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "alignContent": "center",
+          "fontSize": 37.5,
+          "fontWeight": "700",
+          "justifyContent": "center",
+          "textAlign": "center",
+        }
+      }
+    >
+      CountDown:
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#fff",
+        "borderColor": "#ddd",
+        "flex": 1,
+      }
+    }
+  >
+    <TextInput
+      allowFontScaling={true}
+      keyboardType="numeric"
+      onChangeText={[Function]}
+      onSubmitEditing={[Function]}
+      placeholder="(Min)"
+      placeholderTextColor="#777776"
+      rejectResponderTermination={true}
+      style={
+        Object {
+          "color": "#62bfac",
+          "fontSize": 50,
+          "fontStyle": "normal",
+          "textAlign": "center",
+        }
+      }
+      underlineColorAndroid="transparent"
+    />
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignContent": "center",
+        "backgroundColor": "#62bfac",
+        "flex": 1,
+        "justifyContent": "center",
+        "opacity": 1,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#fff",
+          "fontSize": 52.083333333333336,
+          "textAlign": "center",
+        }
+      }
+    >
+      START
+    </Text>
+  </View>
+</View>
+`;
