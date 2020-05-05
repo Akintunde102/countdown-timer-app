@@ -23,7 +23,7 @@ export function useInterval(callback: Function, delay: number | null) {
  *
  * @param timeInSeconds
  */
-export const FormatTimeForDisplay = (timeInSeconds: number) => {
+export const formatTimeForDisplay = (timeInSeconds: number) => {
   const minutes = Math.floor(timeInSeconds / 60);
   const seconds = timeInSeconds - minutes * 60;
   const timeObj = {

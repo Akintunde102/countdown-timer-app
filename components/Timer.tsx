@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Player} from '@react-native-community/audio-toolkit';
-import {useInterval, FormatTimeForDisplay} from '../utils';
+import {useInterval, formatTimeForDisplay} from '../utils';
 import ControlButtons from './ControlButtons';
 import {SizeContext} from '../contexts';
 
@@ -30,7 +30,7 @@ const Timer = ({
   // States
   const [secsLeft, setSecsLeft] = useState<number>(durationInSecs);
   const [delay, setDelay] = useState<number>(1000);
-  const {formattedDisplay, digitNumber} = FormatTimeForDisplay(secsLeft);
+  const {formattedDisplay, digitNumber} = formatTimeForDisplay(secsLeft);
   const [pause, setPause] = useState<boolean>(true);
   const [showTimer, setShowTimer] = useState<boolean>(false);
   const [tagText, setTagText] = useState<string>('');
